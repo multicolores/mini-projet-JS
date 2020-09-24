@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown</title>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      border: none;
+      outline: none;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Open Sans", sans-serif;
+    }
+
+    section {
+      height: 100vh;
+      background: #040404;
+
+      color: #f9f9f9;
+      font-size: 4rem;
+      text-transform: uppercase;
+      font-weight: bold;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      padding: 2rem;
+      background-color: #ff4754;
+
+      display: grid;
+      grid-template-columns: 25% auto;
+      gap: 30%;
+    }
+
+    .nav__headline {
+      font-size: 1rem;
+    }
+
+    .nav__list {
+      list-style-type: none;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .nav__link {
+      text-decoration: none;
+      color: #040404;
+      font-weight: 600;
+
+      transition: opacity 200ms ease-in-out;
+      overflow: hidden;
+    }
+
+    .nav__link::after {
+      content: "";
+      display: block;
+
+      width: 0;
+      height: 2px;
+
+      margin-top: 2px;
+      border-radius: 2px;
+
+      background: #040404;
+
+      transition: width 200ms ease-in-out;
+    }
+
+    .nav__link.nav--current::after,
+    .nav__link:hover::after {
+      width: 100%;
+    }
+  </style>
+
+  <body>
+    <nav class="nav">
+      <h1 class="nav__headline">scroll indicator</h1>
+
+      <ul class="nav__list">
+        <li>
+          <a href="#home" class="nav__link"> Home </a>
+        </li>
+        <li>
+          <a href="#about" class="nav__link"> About </a>
+        </li>
+        <li>
+          <a href="#resume" class="nav__link"> Resume </a>
+        </li>
+        <li>
+          <a href="#contact" class="nav__link"> Contact </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="home">Home</section>
+      <section id="about">About</section>
+      <section id="resume">Resume</section>
+      <section id="contact">Contact</section>
+    </main>
+  </body>
+
+  <script>
+    const sections = [...document.querySelectorAll("section")];
+    const getLinkById = (id) => document.querySelector(`a[href='#${id}']`);
+
+    const inView = (section) => {
+      let top = section.offsetTop;
+      let height = section.offsetHeight;
+
+      while (section.offsetParent) {
+        section = section.offsetParent;
+        top += section.offsetTop;
+      }
+
+      return (
+        top < window.pageYOffset + window.innerHeight &&
+        top + height > window.pageYOffset
+      );
+    };
+
+    window.onscroll = () => {
+      let next = false;
+
+      sections.forEach((section) => {
+        const a = getLinkById(section.id);
+
+        if (inView(section) && !next) {
+          a.classList.add("nav--current");
+          next = true;
+        } else {
+          a.classList.remove("nav--current");
+        }
+      });
+    };
+  </script>
+</html>
